@@ -3,6 +3,7 @@ class numeration():
     hexadecimal_l = ["0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"]
     binaire_l = [[0,0,0,0],[0,0,0,1],[0,0,1,0],[0,0,1,1],[0,0,1,0,0],[0,1,0,1],[0,1,1,0],[0,1,1,1],[1,0,0,0],[1,0,0,1],[1,0,1,0],[1,0,1,1],[1,1,0,0],[1,1,0,1],[1,1,1,0],[1,1,1,1]]
     decimal_l = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
+    ASCII_l = ["null","start of heading","start of text","end of text","end of transmission","enquiry","acknowledge","bell","backspace","horizontal tab","NL line feed,new line","vertical tab","NL form feed,new page","carriage return","shift out","shift in","data link escape","device control 1","device control 2","device control 3","device control 4","negative acknowledge","synchronous idle","end of trans. block","cancel","end of medium","substitute","escape","file separator","group separator","record separator","unit separator","Space","!",'"',"#","§","%","&","'","(",")","*","+",",","-",".","/","0","1","2","3","4","5","6","7","8","9",":",";","<","=",">","?","@","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","[","\'","]","^","_","`","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","{","|","}","~","DEL"]
     
     def __init__(self,number,base):
         self.base = base
@@ -36,6 +37,21 @@ class numeration():
                         raise ValueError
             except ValueError:
                 print(ValueError,"tu doit rentrer un nombre correct")
+            else:
+                self.number = number
+
+        elif self.base == "ASCII":
+            try :
+                if not isinstance(number,str):
+                    raise TypeError
+                
+                presence = number in numeration.ASCII_l
+                if presence == False:
+                    raise ValueError
+            except ValueError:
+                print(ValueError,"tu doit rentrer un caractère type ASCII correct")
+            except TypeError:
+                print(TypeError,"tu dois renter un cractère ASCII en str")
             else:
                 self.number = number
         
@@ -88,6 +104,13 @@ class numeration():
                     resultat2 += str(bit)
                 return resultat2
 
+            elif self.base == "ASCII":
+                pos_dec = int(numeration.ASCII_l.index(self.number))
+                nb_decimal = numeration(pos_dec,"decimal")
+                nb_binaire = nb_decimal.binaire()
+                return nb_binaire
+
+
     def decimal(self):
         try : 
             if self.number == None:
@@ -122,6 +145,10 @@ class numeration():
                     resu = res*16**i
                     resultat += resu
                 return resultat
+
+            elif self.base == "ASCII":
+                pos_dec = numeration.ASCII_l.index(self.number)
+                return str(pos_dec)
 
     def hexadecimal(self):
         try : 
@@ -186,10 +213,60 @@ class numeration():
                     res = numeration.hexadecimal_l[pos]
                     resultat += res
                 return resultat
+
+            elif self.base == "ASCII":
+                pos_dec = int(numeration.ASCII_l.index(self.number))
+                nb_dec = numeration(pos_dec,"decimal")
+                nb_hexa = nb_dec.hexadecimal()
+                return nb_hexa
+
+    def ASCII(self):
+        try : 
+            if self.number == None:
+                raise ValueError
+        except :
+            print(ValueError,"tu doit renter un nombre corect")
+        else:
+            if self.base == "decimal":
+                try : 
+                    numeration.ASCII_l[self.number]
+                except IndexError:
+                    print(IndexError,"il n'y a pas de caractère ASCII avec de nombre là")
+                    return "pas de caractère ASCII avec ce nombre"
+                else:
+                    return numeration.ASCII_l[self.number]
+        
+            elif self.base == "binaire":
+                code_dec = self.decimal()
+                try : 
+                    numeration.ASCII_l[code_dec]
+                except IndexError:
+                    print(IndexError,"il n'y a pas de caractère ASCII avec de nombre là")
+                    return "pas de caractère ASCII avec ce nombre"
+                else:
+                    return numeration.ASCII_l[code_dec]
+
+            elif self.base == "hexadecimal":
+                code_dec = self.decimal()
+                try : 
+                    numeration.ASCII_l[code_dec]
+                except IndexError:
+                    print(IndexError,"il n'y a pas de caractère ASCII avec de nombre là")
+                    return "pas de caractères ASCII avec ce nombre"
+                else:
+                    return numeration.ASCII_l[code_dec]
+            
+            elif self.base == "ASCII":
+                return self.number
                 
 
 if __name__ == "__main__":
-    n = numeration("43e","hexadecimal")
+    n = numeration("j","ASCII")
+    print(n.ASCII())
+    print(n.decimal())
+    print(n.hexadecimal())
     print(n.binaire())
+    
+    
     
         
